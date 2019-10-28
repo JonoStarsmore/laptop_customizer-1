@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
-
+import Form from './form';
+import SummaryList from './summaryList';
 // Normalizes string as a slug - a string that is safe to use
 // in both URLs and html attributes
-import slugify from 'slugify';
 
 import './App.css';
 
 // This object will allow us to
 // easily convert numbers into US dollar values
-const USCurrencyFormat = new Intl.NumberFormat('en-US', {
+/*const USCurrencyFormat = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD'
 });
-
+*/
 class App extends Component {
   state = {
     selected: {
@@ -34,7 +34,7 @@ class App extends Component {
       }
     }
   };
-
+//stays in app
   updateFeature = (feature, newValue) => {
     const selected = Object.assign({}, this.state.selected);
     selected[feature] = newValue;
@@ -43,8 +43,9 @@ class App extends Component {
     });
   };
 
+
   render() {
-    const features = Object.keys(this.props.features).map((feature, idx) => {
+   /* const features = Object.keys(this.props.features).map((feature, idx) => {
       const featureHash = feature + '-' + idx;
       const options = this.props.features[feature].map(item => {
         const itemHash = slugify(JSON.stringify(item));
@@ -64,7 +65,7 @@ class App extends Component {
           </div>
         );
       });
-
+//possible next component
       return (
         <fieldset className="feature" key={featureHash}>
           <legend className="feature__name">
@@ -75,6 +76,7 @@ class App extends Component {
       );
     });
 
+/*component
     const summary = Object.keys(this.state.selected).map((feature, idx) => {
       const featureHash = feature + '-' + idx;
       const selectedOption = this.state.selected[feature];
@@ -89,32 +91,28 @@ class App extends Component {
         </div>
       );
     });
+*/
 
+    
     const total = Object.keys(this.state.selected).reduce(
       (acc, curr) => acc + this.state.selected[curr].cost,
       0
     );
-
+    
     return (
       <div className="App">
         <header>
           <h1>ELF Computing | Laptops</h1>
         </header>
         <main>
-          <form className="main__form">
-            <h2>Customize your laptop</h2>
-            {features}
-          </form>
-          <section className="main__summary">
-            <h2>Your cart</h2>
-            {summary}
-            <div className="summary__total">
-              <div className="summary__total__label">Total</div>
-              <div className="summary__total__value">
-                {USCurrencyFormat.format(total)}
-              </div>
-            </div>
-          </section>
+          <Form 
+          features={this.props.features}
+          selected={this.state.selected}
+          updateFeature={this.updateFeature}/>
+          <SummaryList 
+          selected={this.state.selected}
+          total={total}
+           />
         </main>
       </div>
     );
